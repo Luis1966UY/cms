@@ -50,15 +50,6 @@
                             @endif
                         @else
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  Categories
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="categoryDropdown">
-                                  <a class="dropdown-item" href="/categories">List</a>
-                                  <a class="dropdown-item" href="/new-category">Add Categoy</a>
-                                </div>
-                              </li>
-                            <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
@@ -82,14 +73,35 @@
         </nav>
 
         <main class="py-4">
+            @auth
+                <div class="container">
+                    @if(session()->has('success'))
+                        <div class="alert alert-success">
+                            {{ session()->get('success') }}
+                        </div>
+                    @endif
+                    <div class="row">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a href="#">Posts</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="{{ route('categories.index') }}">Categories</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-8">
+                        
+                            @yield('content')
 
-            @if(session()->has('success'))
-                <div class="alert alert-success">
-                    {{ session()->get('success') }}
+                        </div>
+                    </div>
                 </div>
-            @endif
-        
-            @yield('content')
+            @else
+                @yield('content')
+            @endauth
+
         </main>
     </div>
 </body>

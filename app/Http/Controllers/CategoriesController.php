@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Category;
+use App\Http\Requests\Categories\CreateCategoryRequest;
+use App\Http\Requests\Categories\UpdateCategoryRequest;
 
 class CategoriesController extends Controller
 {
@@ -19,45 +21,32 @@ class CategoriesController extends Controller
         return view('categories.create');
     }
 
-    public function store()
+    public function store(CreateCategoryRequest $request)
     {
-        $this->validate(request(), [
-            'name' => 'required|min:5|max:50'
+        Category::create([
+            'name' => $request->name,
         ]);
-
-        $data = request()->all();
-
-        $category = new Category();
-
-        $category->name = $data['name'];
-
-        $category->save();
 
         session()->flash('success', 'Category created successfully.');
 
-        return redirect('/categories');
+        return redirect(route('categories.index'));
     }
 
     public function edit(Category $category)
     {
-        return view('categories.edit')->with('category', $category);
+        return view('categories.create')->with('category', $category);
     }
 
-    public function update(Category $category)
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $this->validate(request(), [
-            'name' => 'required|min:5|max:50'
+        $category->update([
+            'name' => $request->name,
         ]);
 
-        $data = request()->all();
-
-        $category->name = $data['name'];
-
-        $category->save();
 
         session()->flash('success', 'Category updated successfully.');
 
-        return redirect('/categories');
+        return redirect(route('categories.index'));
     }
 
     public function destroy(Category $category)
