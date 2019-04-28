@@ -21,11 +21,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('categories', "CategoriesController");
 
-// Route::get('/categories', 'CategoriesController@index');
-
-// Route::get('categories/create', 'CategoriesController@create');
-// Route::post('store-category', 'CategoriesController@store');
-
-// Route::get('categories/{category}/edit', 'CategoriesController@edit');
-// Route::post('categories/{category}/update-category', 'CategoriesController@update');
-// Route::get('categories/{category}/delete', 'CategoriesController@destroy');
+Route::resource('posts', 'PostsController');

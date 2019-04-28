@@ -59,7 +59,6 @@ CMS- Categories
 
         </div>
     </div>
-            
         
 @endsection
 
