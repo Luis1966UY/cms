@@ -38,12 +38,13 @@ class PostsController extends Controller
     public function store(CreatePostsRequest $request)
     {
         $image = $request->image->store('posts');
-
+//dd($request);
         Post::create([
             'title' => $request->title,
             'description' => $request->description,
             'content' => $request->content,
             'image' => $image,
+            'published_at' => $request->published_at,
         ]);
 
         session()->flash('success', 'Post created successfully');
