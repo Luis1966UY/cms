@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\Posts\CreatePostsRequest;
+use App\Http\Requests\Posts\UpdatePostsRequest;
 use App\Post;
-use Illuminate\Support\Facades\Storage;
 
 class PostsController extends Controller
 {
@@ -38,14 +38,17 @@ class PostsController extends Controller
     public function store(CreatePostsRequest $request)
     {
         $image = $request->image->store('posts');
-//dd($request);
-        Post::create([
+        $date = strtotime(str_replace('/', '-', $request->published_at));
+
+        Post::create(
+            [
             'title' => $request->title,
             'description' => $request->description,
             'content' => $request->content,
             'image' => $image,
-            'published_at' => $request->published_at,
-        ]);
+            'published_at' => date('Y-m-d H:i', $date),
+            ]
+        );
 
         session()->flash('success', 'Post created successfully');
 
@@ -69,9 +72,9 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return view('posts.create')->with('post', $post);
     }
 
     /**
@@ -81,9 +84,23 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdatePostsRequest $request, Post $post)
     {
-        //
+        $data = $request->only(['title', 'description', 'published_at', 'content']);
+        $date = str_replace('/', '-', $request->published_at);
+        $data['published_at'] = date('Y-m-d H:i', strtotime($date));
+        
+        if ($request->hasFile('image')) {
+            $image = $request->image->store('posts');
+            $post->deleteImage();
+            $data['image'] = $image;
+        }
+
+        $post->update($data);
+
+        session()->flash('success', 'Post updated successfully');
+
+        return redirect(route('posts.index'));
     }
 
     /**
@@ -97,7 +114,7 @@ class PostsController extends Controller
         $post = Post::withTrashed()->where('id', $id)->firstOrFail();
         
         if ($post->trashed()) {
-            Storage::delete($post->image);
+            $post->deleteImage();
             $post->forceDelete();
         } else {
             $post->delete();
@@ -118,5 +135,21 @@ class PostsController extends Controller
         $trashed = Post::onlyTrashed()->get();
 
         return view('posts.index')->withPosts($trashed);
+    }
+
+        /**
+     * Restore a trashed post.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function restore($id)
+    {
+        $post = Post::withTrashed()->where('id', $id)->firstOrFail();
+        
+        $post->restore();
+
+        session()->flash('success', 'Post restored successfully');
+
+        return redirect()->back();
     }
 }
