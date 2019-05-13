@@ -15,21 +15,35 @@ CMS- Categories
         </div>
         <div class="card-body">
             @if($categories->count() > 0)
-                <ul class="list-group">
-                @foreach($categories as $category)
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Posts Count</th>
+                            <th></th>
+                        </tr>
+                    </thead>
 
-                    <li class="list-group-item">
-                        {{ $category->name }}
+                    <tbody>
+                    @foreach($categories as $category)
 
-                        
-                        {{-- <a href="/categories/{{ $category->id }}/delete" class="btn btn-danger btn-sm float-right mx-2">Delete</a>  --}}
-                        <button class="btn btn-danger btn-sm float-right mx-2" onclick="handleDelete({{ $category->id }})">Delete</button>
-                        <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-success btn-sm float-right" >Edit</a> 
-
-                    </li>
+                        <tr>
+                            
+                            <td>
+                                {{ $category->name }}
+                            </td>
+                            <td>
+                                {{ $category->posts->count() }}
+                            </td>
+                            <td>
+                                <button class="btn btn-danger btn-sm float-right mx-2" onclick="handleDelete({{ $category->id }})">Delete</button>
+                                <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-success btn-sm float-right" >Edit</a> 
+                            </td>
+                        </tr>
 
                     @endforeach
-                </ul>
+                    </tbody>
+                </table>
                 <!-- Modal -->
                 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
