@@ -1,29 +1,29 @@
 @extends('layouts.app')
 
 @section('title')
-CMS- Categories - Create
+CMS- Tags - Create
 @endsection
 
 @section('content')
     <div class="card card-default">
         <div class="card-header">
-            {{ isset($category)  ? 'Edit Category' : 'Create category' }}
+            {{ isset($tag)  ? 'Edit Tag' : 'Create tag' }}
         </div>
         <div class="card-body">
             @include('partials.errors')
-            <form action="{{ isset($category) ? route('categories.update', $category->id) : route('categories.store') }}" method="post">
+            <form action="{{ isset($tag) ? route('tags.update', $tag->id) : route('tags.store') }}" method="post">
                 @csrf
 
-                @if(isset($category))
+                @if(isset($tag))
                     @method('PUT')
                 @endif
                 
                 <div class="form-group">
-                    <input type="text" class="form-control" name="name" placeholder="Name" value="{{ isset($category) ? $category->name : '' }}">
+                    <input type="text" class="form-control" name="name" placeholder="Name" value="{{ isset($tag) ? $tag->name : '' }}">
                 </div>
                 
                 <div class="form-group text-center">
-                    <button type="submit" class="btn btn-success">{{ isset($category) ? 'Update Category': 'Add Category' }}</button>
+                    <button type="submit" class="btn btn-success">{{ isset($tag) ? 'Update Tag': 'Add Tag' }}</button>
                 </div>
             </form>
         </div>

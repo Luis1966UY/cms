@@ -25,7 +25,7 @@
                                 <td><img src="{{ asset('storage/'.$post->image) }}" width="120px" height="100px" alt=""></td>
                                 <td>{{ $post->title }}</td>
                                 <td>
-                                    <a href="{{ route('categories.edit', $post->categoy->id) }}">
+                                    <a href="{{ route('categories.edit', $post->category->id) }}">
                                         {{ $post->category->name }}
                                     </a>
                                 </td>

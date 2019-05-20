@@ -2,11 +2,11 @@
 
 @section('content')
     <div class="card card-default">
-        <div class="card-head">
+        <div class="card-header">
             {{ isset($post) ? 'Edit Post' : 'Create Post'  }}
         </div>
         <div class="card-body">
-
+            @include('partials.errors')
             <form action="{{ isset($post) ? route('posts.update', $post->id) : route('posts.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
